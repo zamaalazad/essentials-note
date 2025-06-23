@@ -1,0 +1,3 @@
+git remote set-url origin https://zamaalazad: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@github.com/zamaalazad/essentials-note.git
+
+## git authentication for GitHub with private repository
