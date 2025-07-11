@@ -2,15 +2,15 @@
 
 ## 🧾 Distro Information
 
-- **Cachy OS**: 
-- **Arch Linux**: 
-- **Rolling**: (Rolling / LTS / Semi-rolling)
-- **Pacman/AUR/yay**: 
-- **Init System**: 
-- **gnome desktop environment**: 
-- **cachyos.org**: 
-- **1.5GB**: 
-- **Fast loading, good speed**: 
+- **Cachy OS** 
+- **Arch Linux**
+- **Rolling**: Rolling
+- **Pacman/AUR/yay**
+- **Init System**
+- **gnome desktop environment**
+- **cachyos.org**
+- **1.5GB**
+- **Fast loading, good speed**
 
 ---
 
