@@ -1,26 +1,58 @@
 #!/bin/bash
 
-# কালার কোড
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
+# --- ভেরিয়েবল সেট করা (ভবিষ্যতে নতুন ভার্সন এলে শুধু এখানে পরিবর্তন করলেই চলবে) ---
+PHP_VERSION="8.3"
 
-echo -e "${GREEN}🔧 Laravel Development Environment Setup Starting...${NC}"
+# --- স্ক্রিপ্ট শুরু ---
+echo "=================================================="
+echo "Laravel Environment Setup Script"
+echo "Target PHP Version: ${PHP_VERSION}"
+echo "=================================================="
+echo ""
 
-# Step 1: Update system
-sudo apt update && sudo apt upgrade -y
+# --- ধাপ ১: সিস্টেম আপডেট এবং প্রয়োজনীয় প্যাকেজ ইনস্টল ---
+echo ">>> Step 1: Updating system and installing prerequisites..."
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y software-properties-common ca-certificates lsb-release apt-transport-https git unzip curl
 
-# Step 2: Install PHP & Required Extensions
-sudo apt install -y php php-cli php-mbstring php-xml php-bcmath php-curl php-mysql php-zip unzip curl git php-tokenizer php-sqlite3
+# --- ধাপ ২: Ondřej Surý এর PPA (Personal Package Archive) যোগ করা ---
+# এই PPA ডেবিয়ান/উবুন্টুর জন্য সর্বশেষ PHP সংস্করণ সরবরাহ করে।
+echo ""
+echo ">>> Step 2: Adding the ondrej/php PPA..."
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update
 
-# Step 3: Install Composer
-if ! command -v composer
-then
-    echo -e "${GREEN}🎼 Installing Composer...${NC}"
-    curl -sS https://getcomposer.org/installer | php
-    sudo mv composer.phar /usr/local/bin/composer
-else
-    echo -e "${GREEN}🎼 Composer already installed.${NC}"
+# --- ধাপ ৩: সর্বশেষ PHP এবং প্রয়োজনীয় মডিউল ইনস্টল ---
+echo ""
+echo ">>> Step 3: Installing PHP ${PHP_VERSION} and required extensions..."
+sudo apt install -y \
+    php${PHP_VERSION}-fpm \
+    php${PHP_VERSION}-cli \
+    php${PHP_VERSION}-mysql \
+    php${PHP_VERSION}-mbstring \
+    php${PHP_VERSION}-xml \
+    php${PHP_VERSION}-dom \
+    php${PHP_VERSION}-curl \
+    php${PHP_VERSION}-zip \
+    php${PHP_VERSION}-gd \
+    php${PHP_VERSION}-bcmath \
+    php${PHP_VERSION}-tokenizer \
+    php${PHP_VERSION}-intl \
+    php${PHP_VERSION}-sqlite3 \
+    sqlite3
+
+# --- ধাপ ৪: Composer ইনস্টল করা (গ্লোবালি) ---
+# apt থেকে composer ইনস্টল না করে সরাসরি ডাউনলোড করা ভালো, কারণ এতে সর্বদা সর্বশেষ সংস্করণ পাওয়া যায়।
+echo ""
+echo ">>> Step 4: Installing Composer (latest version)..."
+# পুরনো ইনস্টলেশন থাকলে মুছে ফেলা হচ্ছে
+if [ -f "/usr/local/bin/composer" ]; then
+    sudo rm /usr/local/bin/composer
 fi
+curl -sS https://getcomposer.org/installer -o composer-setup.php
+sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+rm composer-setup.php
 
 # Step 4: Install MySQL Server
 sudo apt install -y mysql-server
