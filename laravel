@@ -54,33 +54,4 @@ curl -sS https://getcomposer.org/installer -o composer-setup.php
 sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 rm composer-setup.php
 
-# Step 4: Install MySQL Server
-sudo apt install -y mysql-server
-sudo systemctl enable mysql
-sudo systemctl start mysql
-
-# Step 5: Create MySQL Database
-echo -e "${GREEN}🗄️ Setting up MySQL database...${NC}"
-read -p "Enter MySQL root password (leave blank if none): " rootpass
-read -p "Enter your Laravel DB name: " dbname
-read -p "Enter DB user name: " dbuser
-read -p "Enter DB user password: " dbpass
-
-sudo mysql  -e "CREATE DATABASE ${dbname}; CREATE USER '${dbuser}'@'localhost' IDENTIFIED BY '${dbpass}'; GRANT ALL PRIVILEGES ON ${dbname}.* TO '${dbuser}'@'localhost'; FLUSH PRIVILEGES;"
-
-# Step 6: Install Laravel via Composer
-read -p "Enter Laravel project name: " projectname
-composer create-project --prefer-dist laravel/laravel $projectname
-
-# Step 7: Configure .env
-cd $projectname
-cp .env.example .env
-php artisan key:generate
-
-# Update DB config
-sed -i "s/DB_DATABASE=.*/DB_DATABASE=${dbname}/" .env
-sed -i "s/DB_USERNAME=.*/DB_USERNAME=${dbuser}/" .env
-sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=${dbpass}/" .env
-
-echo -e "${GREEN}✅ Laravel Project $projectname setup complete.${NC}"
-echo -e "${GREEN}🚀 To run your project: cd $projectname && php artisan serve${NC}"
+echo -e "${GREEN}✅ Laravel setup complete.${NC}"
